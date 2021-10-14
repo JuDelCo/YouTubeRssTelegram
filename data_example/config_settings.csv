@@ -1,0 +1,6 @@
+IntervalInMinutesForEachRun,5
+TimeLocation,Europe/Madrid
+RssSourcesProcessMaxCount,25
+WaitMinutesToRefreshAgainRssSource,120
+AgeInDaysToIgnoreRssItem,7
+RSSUrlLogMaxCount,1024
