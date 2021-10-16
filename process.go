@@ -125,17 +125,24 @@ func getRssItems(feed *gofeed.Feed, rssSource *RssSource) []RssItem {
 			continue
 		}
 
-		i := sort.SearchStrings(rssUrlLog, strings.TrimSpace(feedItem.Link))
+		i := sort.SearchStrings(rssUrlLogSorted, strings.TrimSpace(feedItem.Link))
 
-		if i < len(rssUrlLog) && rssUrlLog[i] == strings.TrimSpace(feedItem.Link) {
+		if i < len(rssUrlLogSorted) && rssUrlLogSorted[i] == strings.TrimSpace(feedItem.Link) {
 			continue
 		}
 
 		rssItem := RssItem{}
 		rssItem.title = strings.TrimSpace(feedItem.Title)
 		rssItem.link = strings.TrimSpace(feedItem.Link)
-		rssItem.author = strings.TrimSpace(feedItem.Authors[0].Name)
 		rssItem.desc = strings.TrimSpace(feedItem.Description)
+
+		if len(feedItem.Authors) > 0 {
+			rssItem.author = strings.TrimSpace(feedItem.Authors[0].Name)
+		} else if feedItem.Author != nil {
+			rssItem.author = strings.TrimSpace(feedItem.Author.Name)
+		} else {
+			rssItem.author = rssSource.desc
+		}
 
 		if feedItem.PublishedParsed != nil {
 			utcPublishedParsed := feedItem.PublishedParsed.UTC().Local()
@@ -148,9 +155,7 @@ func getRssItems(feed *gofeed.Feed, rssSource *RssSource) []RssItem {
 			rssItem.thumbnailUrl = strings.TrimSpace(feedItem.Extensions["media"]["group"][0].Children["thumbnail"][0].Attrs["url"])
 			rssItem.videoDuration = "-:--"
 
-			//output, err := lib.ExecuteCmd("youtube-dl", "--skip-download", "--get-duration", "-i", feedItem.Link)
-			output, err := lib.ExecuteCmd("python3", "-m", "youtube_dl", "--skip-download", "--get-duration", "-i", feedItem.Link)
-			//output, err := lib.ExecuteCmd("python3", "youtube_dl_helper.py", feedItem.Link)
+			output, err := lib.ExecuteCmd("python3", "-m", "yt_dlp", "--skip-download", "--get-duration", "-i", feedItem.Link)
 
 			if err != nil {
 				lib.LogError("Can't get video duration with YouTube-DL from video: " + feedItem.Link + "\n" + strings.TrimSpace(strings.Replace(output, "\n", " ", -1)))

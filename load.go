@@ -174,7 +174,9 @@ func loadRssUrlLog() {
 		rssUrlLog = append(rssUrlLog, strings.TrimSpace(line[0]))
 	}
 
-	sort.Strings(rssUrlLog)
+	rssUrlLogSorted = make([]string, len(rssUrlLog))
+	copy(rssUrlLogSorted, rssUrlLog)
+	sort.Strings(rssUrlLogSorted)
 
 	lib.LogDebug("    " + strconv.FormatInt(int64(len(rssUrlLog)), 10) + " RSS URLs loaded")
 }

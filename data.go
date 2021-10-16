@@ -2,6 +2,7 @@ package main
 
 var rssSources = make([]RssSource, 0)
 var rssUrlLog = make([]string, 0)
+var rssUrlLogSorted = make([]string, 0)
 var rssSourcesProcessCounter = 0
 var telegramRssItemSendCounter = 0
 

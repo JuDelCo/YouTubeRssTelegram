@@ -2,6 +2,7 @@ package main
 
 import (
 	"gorsstelegram/lib"
+	"math"
 	"os"
 	"strconv"
 )
@@ -57,16 +58,16 @@ func saveRssUrlLog() {
 	c := 0
 
 	for _, rssUrl := range rssUrlLog {
-		if c >= rssUrlLogMaxCount {
-			break
+		c += 1
+
+		if c <= int(math.Max(1, float64(len(rssUrlLog)-rssUrlLogMaxCount))) {
+			continue
 		}
 
 		row := make([]string, 0)
 		row = append(row, rssUrl)
 
 		records = append(records, row)
-
-		c += 1
 	}
 
 	err := lib.WriteCsvFile(rssUrlLogPath, records)
