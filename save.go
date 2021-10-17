@@ -60,7 +60,7 @@ func saveRssUrlLog() {
 	for _, rssUrl := range rssUrlLog {
 		c += 1
 
-		if c <= int(math.Max(1, float64(len(rssUrlLog)-rssUrlLogMaxCount))) {
+		if c < int(math.Max(1, float64(len(rssUrlLog)-rssUrlLogMaxCount+1))) {
 			continue
 		}
 
